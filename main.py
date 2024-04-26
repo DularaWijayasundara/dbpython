@@ -39,7 +39,7 @@ class ConnectorDB:
         gender= StringVar()
 
         def iExit():
-            iExit=tkinter.messagebox.askyesno("Student Database", "Confirm if you wna t to exit")
+            iExit=tkinter.messagebox.askyesno("Student Database", "Confirm if you want to exit")
             if iExit>0:
                 root.destroy()
                 return
@@ -59,18 +59,25 @@ class ConnectorDB:
             else:
                 sqlCon = pymysql.connect(host='localhost', user='root', password='1999', database='student_registration')
                 cursor = sqlCon.cursor()
-                cursor.execute("insert into basicInfo (studentId, firstName, surname, address, mobile, gender) values(%s, %s, %s, %s, %s, %s)",
-                               (
-                                  int(studentId.get()),
-                                  firstName.get(),
-                                  surname.get(),
-                                  address.get(),
-                                  mobile.get(),
-                                  gender.get()
-                               ))
-                sqlCon.commit()
+                cursor.execute("select * from basicInfo where studentId=%s", (int(studentId.get()),))
+                existing_record = cursor.fetchone()
+                if existing_record:
+                    tkinter.messagebox.showerror("Student Database", "A student with this ID already exists.")
+                else:
+                    cursor.execute("insert into basicInfo (studentId, firstName, surname, address, mobile, gender) values(%s, %s, %s, %s, %s, %s)",
+                                (
+                                    int(studentId.get()),
+                                    firstName.get(),
+                                    surname.get(),
+                                    address.get(),
+                                    mobile.get(),
+                                    gender.get()
+                                ))
+                    sqlCon.commit()
+                    displayData()
+                    tkinter.messagebox.showinfo("Student Database", "Record Entered Successfully")
                 sqlCon.close()
-                tkinter.messagebox.showinfo("Student Database", "Record Entered Successfully")
+                
 
         
         def displayData():
@@ -149,10 +156,6 @@ class ConnectorDB:
                 tkinter.messagebox.showinfo("Student Database", "Error Occurred. Please try again.")
             finally:
                 sqlCon.close()
-
-
-
-
 
 
 
@@ -236,11 +239,9 @@ class ConnectorDB:
         self.btnAddExit = Button(rightFrame1a, font=('arial', 16, 'bold'), text="Exit", bd=4, pady=1, padx=24,
                                 width=8, height=2, command=iExit).grid(row=6,column=0, padx=1)
 
-        # --------------------------------------------------------
+    # --------------------------------------------------------
 
 if __name__=='__main__':
     root = Tk()
     application = ConnectorDB(root)
     root.mainloop()
-
-
