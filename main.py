@@ -78,7 +78,6 @@ class ConnectorDB:
                     tkinter.messagebox.showinfo("Student Database", "Record Entered Successfully")
                 sqlCon.close()
                 
-
         
         def displayData():
             sqlCon = pymysql.connect(host='localhost', user='root', password='1999', database='student_registration')
@@ -134,7 +133,6 @@ class ConnectorDB:
             reset()
 
 
-
         def searchEntry():
             try:
                 sqlCon = pymysql.connect(host='localhost', user='root', password='1999', database='student_registration')
@@ -156,7 +154,6 @@ class ConnectorDB:
                 tkinter.messagebox.showinfo("Student Database", "Error Occurred. Please try again.")
             finally:
                 sqlCon.close()
-
 
 
         # -----------------------------------------------
